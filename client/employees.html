@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employees CRUD</title>
+    <link rel="stylesheet" href="./css/styles.css">
+</head>
+<style>
+    h1 {
+        text-align: center;
+    }
+
+    #user-container {
+        width: 96%;
+        background-color: bisque;
+        margin-left: 2rem;
+
+    }
+
+    table {
+        border-collapse: collapse;
+
+        width: 100%;
+
+    }
+
+    th {
+        background-color: rgb(158, 210, 222);
+
+    }
+
+    th,
+    tr,
+    td {
+        border: 2px solid black;
+        padding: 1rem;
+    }
+
+    td {
+        text-align: center;
+    }
+
+    #add-btn {
+        margin-left: 0;
+        margin-bottom: 1.5rem;
+        border: none;
+        background-color: #0c59e4;
+        color: whitesmoke;
+        padding: 0.5rem;
+        border-radius: 5px;
+        cursor: pointer;
+
+    }
+
+    body {
+        background-color: bisque;
+    }
+
+    #container {
+        background-color: royalblue;
+        width: 30rem;
+        border-radius: 10px;
+        margin-left: 30rem;
+        margin-top: 2rem;
+        align-items: center;
+        text-align: center;
+        color: white;
+    }
+
+    h1 {
+        padding: 1rem;
+    }
+
+    input,
+    label,
+    select {
+        margin: 10px;
+        border-radius: 5px;
+        border: none;
+    }
+
+    input[type=submit] {
+        border: none;
+        background-color: cornflowerblue;
+        color: whitesmoke;
+        padding: 0.5rem;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    input[type=submit]:hover {
+
+        background-color: darkblue
+    }
+
+    #go-back {
+        border: none;
+        background-color: red;
+        color: whitesmoke;
+        padding: 0.5rem;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 0.5rem;
+    }
+
+    .edit-btn {
+        border: none;
+        background-color: #0c59e4;
+        color: whitesmoke;
+        padding: 0.5rem;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 3.5rem;
+
+    }
+
+    .delete-btn {
+        border: none;
+        background-color: red;
+        color: whitesmoke;
+        padding: 0.5rem;
+        border-radius: 5px;
+        cursor: pointer;
+
+    }
+
+    .save-btn {
+        border: none;
+        background-color: cornflowerblue;
+        color: whitesmoke;
+        padding: 0.5rem;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 3.5rem;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    label {
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+
+    
+    #submit-btn {
+        margin-right: 20px;
+
+    }
+
+    button:hover {
+        background-color: rgb(140, 32, 32);
+    }
+    
+    
+</style>
+
+<body>
+    <div id="user-container">
+        <h1>Employees CRUD</h1>
+        <button id="add-btn" onclick="loadAddusers()">Add Employee</button>
+        <table id="users-tables">
+            <thead>
+                <th>User ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>DOB</th>
+                <th>Age</th>
+                <th>Gender</th>
+                <th>Email ID</th>
+                <th>mobile No</th>
+                <th>Job Title</th>
+                <th>Department</th>
+                <th>Employee Type</th>
+                <th>Address</th>
+                <th>DOJ</th>
+                <th>Action</th>
+            </thead>
+            <tbody id="t-body">
+            </tbody>
+        </table>
+    </div>
+    <div id="container" style="display: none">
+        <h1>Submit Details</h1>
+        <form id="add-user-form" onsubmit="event.preventDefault();">
+
+            <label for="empid" style="padding: 8px;border: 1px solid #ccc;border-radius: 5px;">Employee ID:</label>
+            <input type="text" id="empid" name="empid" style="padding: 8px;border: 1px solid #ccc;border-radius: 5px;"
+                required>
+
+            <label for="firstname" style="padding: 8px;border: 1px solid #ccc;border-radius: 5px;">First Name:</label>
+            <input type="text" id="firstname" name="firstname"
+                style="padding: 8px;border: 1px solid #ccc;border-radius: 5px;" required>
+
+            <label for="lastname" style="padding: 8px;border: 1px solid #ccc;border-radius: 5px;">Last Name:</label>
+            <input type="text" id="lastname" name="lastname"
+                style="padding: 8px;border: 1px solid #ccc;border-radius: 5px;" required>
+            
+            <label for="dob" style="padding: 8px;border: 1px solid #ccc;border-radius: 5px;">Date of Birth:</label>
+            <input type="date" id="dob" name="dob"
+                    style="padding: 8px;border: 1px solid #ccc;border-radius: 5px;" required>
+
+            <label for="age" style="padding: 8px;border: 1px solid #ccc;border-radius: 5px;">Age:</label>
+            <input type="number" id="age" name="age" style="padding: 8px;border: 1px solid #ccc;border-radius: 5px;"
+                required>
+
+            <label for="gender" style="padding: 8px;border: 1px solid #ccc;border-radius: 5px;">Gender</label>
+            <select name="gender" id="gender"
+                style="padding: 8px;border: 1px solid #ccc;border-radius: 5px;">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+
+
+            <label for="email" style="padding: 8px;border: 1px solid #ccc;border-radius: 5px;">Email Id:</label>
+            <input type="email" id="email" name="email" style="padding: 8px;border: 1px solid #ccc;border-radius: 5px;"
+                required>
+
+            <label for="mobile" style="padding: 8px;border: 1px solid #ccc;border-radius: 5px;">Mobile No.:</label>
+            <input type="tel" id="mobile" name="mobile" style="padding: 8px;border: 1px solid #ccc;border-radius: 5px;"
+                required>
+
+            <label for="jobtitle" style="padding: 8px;border: 1px solid #ccc;border-radius: 5px;">Job Title:</label>
+            <input type="text" id="jobtitle" name="jobtitle"
+                style="padding: 8px;border: 1px solid #ccc;border-radius: 5px;" required>
+
+            <label for="department" style="padding: 8px;border: 1px solid #ccc;border-radius: 5px;">Department:</label>
+            <input type="text" id="department" name="department"
+                style="padding: 8px;border: 1px solid #ccc;border-radius: 5px;" required>
+
+            <label for="employeeType" style="padding: 8px;border: 1px solid #ccc;border-radius: 5px;">Employee
+                Type:</label>
+            <select name="employeeType" id="employeeType"
+                style="padding: 8px;border: 1px solid #ccc;border-radius: 5px;">
+                <option value="Full-Time">Full-Time</option>
+                <option value="Intern">Intern</option>
+            </select>
+
+            <label for="address" style="padding: 8px;border: 1px solid #ccc;border-radius: 5px;">Address:</label>
+            <textarea name="address" id="address" cols="30" rows="5"
+                style="margin: 11px;border: 1px solid #ccc;border-radius: 5px;"></textarea>
+
+
+
+            <div><button id="submit-btn" onclick="handleCreate()"
+                    style="background-color: red;color: white;border: none;padding: 10px 20px;border-radius: 5px;cursor: pointer;margin-top: 20px;width: 22%;">Create</button><button
+                    style="background-color: red;color: white;border: none;padding: 10px 20px;border-radius: 5px;cursor: pointer;margin-top: 20px;width: 22%;"
+                    onclick="handleClear('add-user-form')">Clear</button><button id="go-back" onclick="loadViewusers()" style="background-color: red;color: white;border: none;padding: 10px 20px;border-radius: 5px;cursor: pointer;margin-top: 20px;width: 21%;margin-left: 20px">Go Back</button></div>
+
+
+        </form>
+        
+    </div>
+
+</body>
+<script>
+    // function handleCreate(event) {
+    //     event.preventDefault();
+    //     const form = document.querySelector('form');
+    //     const responseMessageDiv = document.getElementById('responseMessage');
+    //     const createURL = `http://localhost:5000/employee`;
+
+    //     const userData = {
+    //         firstName: document.getElementById('firstname').value,
+    //         lastName: document.getElementById('lastname').value,
+    //         email: document.getElementById('email').value,
+    //         mobile: document.getElementById('mobile').value,
+
+    //     };
+
+    //     fetch(createURL, {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json'
+    //         },
+    //         body: JSON.stringify(userData)
+    //     })
+    //         .then(response => {
+    //             if (response.ok) {
+    //                 alert('Successfully Created Employee!!!');
+    //                 form.reset();
+    //                 return response.text(); // Get the response as text
+    //             } else {
+    //                 alert('Failed to create the Employee'); // Update the error message here
+    //             }
+    //         })
+    //         .then(responseText => {
+    //             responseMessageDiv.innerHTML = `<p>${responseText}</p>`; // Display the response text
+    //             form.reset();
+    //         })
+    //         .catch(err => {
+    //             alert('Error creating an Employee!!!');
+    //         });
+    // }
+
+
+
+    function fetchUsers() {
+        var url = "http://localhost:5000/api/employee";
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                var users = JSON.parse(this.responseText)
+                loadUsers(users.data);
+            }
+        };
+        xhttp.open("GET", url, true);
+        xhttp.send();
+    }
+
+    function loadUsers(users) {
+        var tableBody = document.getElementById('t-body');
+        tableBody.innerHTML = ''; // Clear the table body before populating with new data
+        for (let i = 0; i < users.length; i++) {
+            var currentUser = users[i];
+            tableBody.innerHTML += `
+            <tr>
+                <td>${currentUser.id}</td>
+                <td>${currentUser.firstName}</td>
+                <td>${currentUser.lastName}</td>
+                <td>${new Date(currentUser.dob).toLocaleDateString('en-GB').replace(/\//g, '-')}</td>
+                <td>${currentUser.age}</td>
+                <td>${currentUser.gender}</td>
+                <td>${currentUser.emailId}</td>
+                <td>${currentUser.mobileNo}</td>
+                <td>${currentUser.JobTitle}</td>
+                <td>${currentUser.Department}</td>
+                <td>${currentUser.EmployeeType}</td>
+                <td>${currentUser.Address}</td>
+                <td>${new Date(currentUser.JoiningDate).toLocaleDateString('en-GB').replace(/\//g, '-')}</td>
+
+                <td>
+                    <button id="edit-btn-${currentUser.id}" onclick="editHandler('${currentUser.id}')" class="edit-btn" style="margin-bottom: 0.2rem">Edit</button>
+                    <button onclick="deleteHandler('${currentUser.id}')" id="delete-btn-${currentUser.id}" class="delete-btn">Delete</button>
+                </td>
+            </tr>`;
+        }
+    }
+
+    function handleCreate() {
+        var xhttp = new XMLHttpRequest();
+        var url = "http://localhost:5000/api/employee";
+        xhttp.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 201) { // Changed status code to 201 for successful creation
+                console.log("Employee Added Successfully");
+                alert('Employee Added Sucessfully');
+                document.getElementById('empid').value = '';
+                document.getElementById('firstname').value = '';
+                document.getElementById('lastname').value = '';
+                document.getElementById('dob').value = '';
+                document.getElementById('age').value = '';
+                document.getElementById('gender').value = '';
+                document.getElementById('email').value = '';
+                document.getElementById('mobile').value = '';
+                document.getElementById('jobtitle').value = '';
+                document.getElementById('department').value = '';
+                document.getElementById('employeeType').value = '';
+                document.getElementById('address').value = '';
+
+            }
+            else if(this.readyState === 4 && this.status === 500){
+                alert('EmpId or mobile number already Exists');
+            }
+            else if(this.readyState === 4 && this.status === 404){
+                alert('Failed to add New Employee');
+            }
+        };
+        xhttp.open("POST", url, true);
+        xhttp.setRequestHeader("Content-type", "application/json");
+        var empid = document.getElementById('empid').value;
+        var firstName = document.getElementById('firstname').value;
+        var lastName = document.getElementById('lastname').value;
+        var dob = document.getElementById('dob').value;
+        var age = document.getElementById('age').value;
+        var gender = document.getElementById('gender').value;
+        var email = document.getElementById('email').value;
+        var mobile = document.getElementById('mobile').value;
+        var jobtitle = document.getElementById('jobtitle').value;
+        var department = document.getElementById('department').value;
+        var employeeType = document.getElementById('employeeType').value;
+        var address = document.getElementById('address').value;
+
+        xhttp.send(JSON.stringify({
+            "id": empid,
+            "firstName": firstName,
+            "lastName": lastName,
+            "dob": dob,
+            "age": age,
+            "gender": gender,
+            "emailId": email,
+            "mobileNo": mobile,
+            "JobTitle": jobtitle,
+            "Department": department,
+            "EmployeeType": employeeType,
+            "Address": address
+
+
+        }));
+
+    }
+    function editHandler(userId) {
+        var editButton = document.getElementById(`edit-btn-${userId}`);
+        var tableRow = editButton.parentNode.parentNode;
+
+        //Getting current values of row
+        var firstname = tableRow.cells[1].innerText;
+        var lastname = tableRow.cells[2].innerText;
+        var dob = tableRow.cells[3].innerText;
+        var age = tableRow.cells[4].innerText;
+        var gender = tableRow.cells[5].innerText;
+        var emailId = tableRow.cells[6].innerText;
+        var mobile = tableRow.cells[7].innerText;
+        var jobTitle = tableRow.cells[8].innerText;
+        var department = tableRow.cells[9].innerText;
+        var empType = tableRow.cells[10].innerText;
+        var address = tableRow.cells[11].innerText;
+        
+
+        //Creating input values with current values
+        var firstnameInput = document.createElement('input');
+        firstnameInput.type = 'text';
+        firstnameInput.value = firstname;
+
+        var lastnameInput = document.createElement('input');
+        lastnameInput.type = 'text';
+        lastnameInput.value = lastname;
+
+        var ageInput = document.createElement('input');
+        ageInput.type = 'number';
+        ageInput.value = age;
+
+        var genderInput = document.createElement('select');
+        genderInput.innerHTML = `
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+        `;
+        genderInput.value = gender;
+
+        var emailInput = document.createElement('input');
+        emailInput.type = 'email';
+        emailInput.value = emailId;
+
+        var mobileInput = document.createElement('input');
+        mobileInput.type = 'tel';
+        mobileInput.value = mobile;
+
+        var jobtitleInput = document.createElement('input');
+        jobtitleInput.type = 'text';
+        jobtitleInput.value = jobTitle;
+
+        var deptInput = document.createElement('input');
+        deptInput.type = 'text';
+        deptInput.value = department;
+
+        var emptypeInput = document.createElement('select');
+        emptypeInput.innerHTML = `
+            <option value="Full-Time">Full-Time</option>
+            <option value="Intern">Intern</option>
+        `;
+        emptypeInput.value = empType;
+
+        var addressInput = document.createElement('textarea');
+        //deptInput.type = 'text';
+        addressInput.value = address;
+
+
+        
+
+        //Replace the current cell with the input fieds
+        tableRow.cells[1].innerHTML = '';
+        tableRow.cells[1].appendChild(firstnameInput);
+
+        tableRow.cells[2].innerHTML = '';
+        tableRow.cells[2].appendChild(lastnameInput);
+
+        // tableRow.cells[3].innerHTML = '';
+        // tableRow.cells[3].appendChild(dobInput);
+
+        tableRow.cells[4].innerHTML = '';
+        tableRow.cells[4].appendChild(ageInput);
+
+        tableRow.cells[5].innerHTML = '';
+        tableRow.cells[5].appendChild(genderInput);
+
+        tableRow.cells[6].innerHTML = '';
+        tableRow.cells[6].appendChild(emailInput);
+
+        tableRow.cells[7].innerHTML = '';
+        tableRow.cells[7].appendChild(mobileInput);
+
+        tableRow.cells[8].innerHTML = '';
+        tableRow.cells[8].appendChild(jobtitleInput);
+
+        tableRow.cells[9].innerHTML = '';
+        tableRow.cells[9].appendChild(deptInput);
+
+        tableRow.cells[10].innerHTML = '';
+        tableRow.cells[10].appendChild(emptypeInput);
+
+        tableRow.cells[11].innerHTML = '';
+        tableRow.cells[11].appendChild(addressInput);
+
+
+
+        var saveButton = document.createElement('button');
+        saveButton.id = `save-btn-${userId}`;
+        saveButton.className = "save-btn";
+        saveButton.innerText = 'Save';
+        saveButton.addEventListener('click', function () {
+            saveHandler(userId);
+        });
+
+        tableRow.cells[13].innerHTML = '';
+        tableRow.cells[13].appendChild(saveButton);
+
+    }
+
+    function saveHandler(userId) {
+        var saveButton = document.getElementById(`save-btn-${userId}`);
+        var tableRow = saveButton.parentNode.parentNode;
+
+        //Getting access to input values
+        var firstnameInput = tableRow.cells[1].querySelector('input');
+        var lastnameInput = tableRow.cells[2].querySelector('input');
+        var ageInput = tableRow.cells[4].querySelector('input');
+
+        var genderInput = tableRow.cells[5].querySelector('select');
+        var emailidInput = tableRow.cells[6].querySelector('input');
+        var mobileInput = tableRow.cells[7].querySelector('input');
+        var jobtitleInput = tableRow.cells[8].querySelector('input');
+        var deptInput = tableRow.cells[9].querySelector('input');
+        var emptypeInput = tableRow.cells[10].querySelector('select');
+        var addressInput = tableRow.cells[11].querySelector('textarea');
+
+
+        var firstname = firstnameInput.value;
+        var lastname = lastnameInput.value;
+        var age = ageInput.value;
+        var gender = genderInput.value;
+        var emailId = emailidInput.value;
+        var mobile = mobileInput.value;
+        var jobTitle = jobtitleInput.value;
+        var department = deptInput.value;
+        var empType = emptypeInput.value;
+        var address = addressInput.value;
+       // var address = addressInput ? addressInput.value : '';
+
+        //Updating the current row with new values
+        if (firstname) {
+            tableRow.cells[1].innerHTML = firstname;
+        }
+        if (lastname) {
+            tableRow.cells[2].innerHTML = lastname;
+        }
+        if (age) {
+            tableRow.cells[4].innerHTML = age;
+        }
+
+        if (gender) {
+            tableRow.cells[5].innerHTML = gender;
+        } else {
+            // Keep the previous state value if it is not edited
+            gender = tableRow.cells[5].innerText;
+        }
+        if (emailId) {
+            tableRow.cells[6].innerHTML = emailId;
+        }
+        if (mobile) {
+            tableRow.cells[7].innerHTML = mobile;
+        }
+        if (jobTitle) {
+            tableRow.cells[8].innerHTML = jobTitle;
+        }
+        if (department) {
+            tableRow.cells[9].innerHTML = department;
+        }
+        if (empType) {
+            tableRow.cells[10].innerHTML = empType;
+        } else {
+            // Keep the previous state value if it is not edited
+            empType = tableRow.cells[10].innerText;
+        }
+        if (address) {
+            tableRow.cells[11].innerHTML = address;
+        }
+        //Replacing the save button with edit and delete button
+        tableRow.cells[13].innerHTML = '';
+        tableRow.cells[13].innerHTML += `
+    <button id="edit-btn-${userId}" onclick="editHandler(${userId})" class="edit-btn">Edit</button>
+    <button onclick="deleteHandler(${userId})" id="delete-btn-${userId}" class="delete-btn">Delete</button>
+    `;
+
+        updateUser(userId, firstname, lastname, age, gender, emailId, mobile, jobTitle, department, empType, address);
+    }
+    function updateUser(userId, firstname, lastname, age, gender, emailId, mobile, jobTitle, department, empType, address) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                console.log("Employee Updated Successfully");
+                fetchUsers(); // Fetch and reload the updated user list
+            }
+        };
+        xhttp.open("PUT", `http://localhost:5000/api/employee/${userId}`, true);
+        xhttp.setRequestHeader("Content-type", "application/json");
+        xhttp.send(JSON.stringify({
+            "firstName": firstname,
+            "lastName": lastname,
+            "age": age,
+            "gender": gender,
+            "emailId": emailId,
+            "mobileNo": mobile,
+            "JobTitle": jobTitle,
+            "Department": department,
+            "EmployeeType": empType,
+            "Address": address,
+        }));
+    }
+
+    function deleteHandler(userId) {
+        var status = confirm("Are you sure you want to delete this Employee ?");
+        if (status) {
+            deleteUser(userId);
+            var currentRow = document.getElementById(`delete-btn-${userId}`).parentNode.parentNode;
+            currentRow.parentNode.removeChild(currentRow);
+        }
+    }
+    function deleteUser(userId) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                console.log("Employee Deleted Successfully");
+                fetchUsers(); // Fetch and reload the updated user list
+            }
+        };
+        xhttp.open("DELETE", `http://localhost:5000/api/employee/${userId}`, true);
+        xhttp.setRequestHeader("Content-type", "application/json");
+        xhttp.send();
+    }
+
+    function loadAddusers() {
+        var userContainer = document.getElementById('user-container');
+        var addUsercontainer = document.getElementById('container');
+
+        if (userContainer && addUsercontainer) {
+            userContainer.style.display = 'none';
+            addUsercontainer.style.display = 'block';
+        }
+    }
+
+    function loadViewusers() {
+        var userContainer = document.getElementById('user-container');
+        var addUsercontainer = document.getElementById('container');
+
+        if (userContainer && addUsercontainer) {
+            userContainer.style.display = 'block';
+            addUsercontainer.style.display = 'none';
+        }
+        fetchUsers();
+    }
+
+    window.onload = function () {
+        var addButton = document.getElementById('add-btn');
+        var goBackButton = document.getElementById('go-back');
+
+        if (addButton) {
+            addButton.addEventListener('click', loadAddusers);
+        }
+
+        if (goBackButton) {
+            goBackButton.addEventListener('click', function () {
+                loadViewusers();
+            });
+        }
+
+        // Initially load the View Users section
+        loadViewusers();
+    };
+
+    var userForm = document.getElementById("add-user-form");
+    userForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        //addUser();
+    });
+
+    function handleClear(formId) {
+        const form = document.getElementById(formId);
+        form.reset();
+    }
+</script>
+
+</html>
